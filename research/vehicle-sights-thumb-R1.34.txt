@@ -1,0 +1,60 @@
+R1.34 maintenance notes - 14 October 2026
+
+Input: Ryan's R1.33 source ZIP, 97.7-second Scorpion recording and injection
+log. The log confirms retail 01.00.10.0621, Chimera and seat kinds 6/7; it does
+not expose individual muzzle coordinates or native shot trajectories.
+
+Observed source issues:
+- Scorpion offsets used horizontal forward plus world-up height even while
+  its view followed pitch. The pitching barrel could enter that position.
+- Vehicle reticle translation used HMD position plus biped aim times distance.
+  Moving the camera moved this ray away from the weapon's origin.
+- All compact support hands used 65% thumb curl, with no thumb opposition.
+
+Changes:
+- Pitch-aware Scorpion offsets with a minimum world-up height above the
+  existing turret pivot. Retain that pivot and the preferred level 1.5/1.0m
+  settings. Primary muzzle orientation supplies rendered pitch when available;
+  the validated existing turret/native aim path remains the fallback.
+- Checked compiled mod2 marker reads, matching live region permutations,
+  node-local translation/quaternion transformed by native world node matrices.
+  Primary and secondary markers are independent. Multiple parallel emitters
+  are averaged (Banshee). Stale weapon ownership, bad counts/indices/quaternions,
+  unsupported camera-origin flags and distant markers decline the new sight.
+- Vehicle inventory identifies the owner weapon. Trigger flags select fixed
+  marker direction or a nominal owner-aim direction within the tag deviation
+  cone. No shot hook or game memory write is introduced. Native autoaim and
+  exact retail launch/impact behaviour are NOT reproduced or proven here.
+- At CrosshairDistance, convert the muzzle-ray point from world space into
+  overlay metres relative to the overridden view origin. No HMD translation
+  is added again. Thus the world reference point stays fixed as the user leans
+  or adjusts camera height. Existing reticle path remains if reads fail.
+- Full plasma-pistol thumb flexion plus anatomical opposition of the thumb
+  subtree. Other fingers, wrist, firing hand and gun transform stay intact.
+  Existing support-only cache captures the completed fold.
+
+Read-only schema references consulted:
+https://github.com/SnowyMouse/invader/blob/master/src/tag/hek/definition/model.json
+https://github.com/SnowyMouse/invader/blob/master/src/tag/hek/definition/weapon.json
+https://github.com/SnowyMouse/chimera/blob/master/src/chimera/halo_data/object.hpp
+https://c20.reclaimers.net/h1/tags/gbxmodel/
+https://c20.reclaimers.net/h1/tags/object/item/weapon/
+
+The Xbox reference implementation below was inspected for conceptual origin,
+marker and unit-aim ownership; its addresses/ABI are NOT used for retail PC:
+https://github.com/bnunu/halo-1/blob/main/source/items/weapons.c
+https://github.com/bnunu/halo-1/blob/main/source/units/units.c
+https://github.com/bnunu/halo-1/blob/main/source/models/models.c
+
+Validation: production portable fixtures with synthetic native memory, VR,
+Windows and renderer doubles. Includes camera pitch/clearance, reference point
+invariance under lean and scale, LT/RT selection, complete Game HUD placement,
+marker permutations/pairs/quaternion composition, malformed reads, full thumb
+chain retention, mirrored layout, bone lengths and repeated fold stability.
+See validation-R1.34.txt. No Windows DLL, live game or headset test performed.
+
+Limitations: this is a fixed-range, pre-spread sight, not a world collision or
+ballistic impact predictor. Exact retail deviation/autoaim and vehicle model
+alignment require runtime validation. Pitch clearance is geometric placement,
+not arbitrary HMD-to-mesh collision. Thumb skin/casing clearance also needs
+runtime inspection. Keep R1.33 available for rollback.

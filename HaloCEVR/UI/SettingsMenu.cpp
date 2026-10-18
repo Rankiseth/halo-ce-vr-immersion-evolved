@@ -1,5 +1,7 @@
 #include <sstream>
 #include "SettingsMenu.h"
+#include "PlayerGuide.h"
+#include "SettingsPresentation.h"
 #include "../Game.h"
 #include "UIRenderer.h"
 #include "UIElement.h"
@@ -43,14 +45,14 @@ void SettingsMenu::CreateMenus()
 
 
 	// This should really be done more automatically
-	const float tabWidth = uiRenderer->CalculateStringWidth(*uiRenderer->GetLargeFont(), " Basic Settings ");
+	const float tabWidth = backgroundPanel->w / 5.0f;
 	const float tabHeight = uiRenderer->GetLargeFont()->lineHeight * 1.1f;
 
 	settingsTabs = new UITabPanel(0.0f, 0.0f, backgroundPanel->w, tabHeight);
 	backgroundPanel->AddElement(settingsTabs);
 
 	// Basic settings tab
-	UITextButton* basicSettings = new UITextButton(20.0f, 0.0f, tabWidth, tabHeight, "Basic Settings", uiRenderer->GetLargeFont(), darkPanelColour, lightPanelColour, textLabelColour);
+	UITextButton* basicSettings = new UITextButton(20.0f, 0.0f, tabWidth, tabHeight, "Basic", uiRenderer->GetLargeFont(), darkPanelColour, lightPanelColour, textLabelColour);
 	basicSettingsPanel = new UIPanel(0.0f, tabHeight, backgroundPanel->w, backgroundPanel->h - tabHeight, lightPanelColour);
 	settingsTabs->AddTab(basicSettings, basicSettingsPanel);
 	backgroundPanel->AddElement(basicSettingsPanel);
@@ -58,12 +60,24 @@ void SettingsMenu::CreateMenus()
 	PopulateBasicSettingsTab();
 
 	// All settings tab
-	UITextButton* allSettings = new UITextButton(20.0f, 0.0f, tabWidth, tabHeight, "All Settings", uiRenderer->GetLargeFont(), darkPanelColour, lightPanelColour, textLabelColour);
+	UITextButton* allSettings = new UITextButton(20.0f, 0.0f, tabWidth, tabHeight, "All", uiRenderer->GetLargeFont(), darkPanelColour, lightPanelColour, textLabelColour);
 	allSettingsPanel = new UIPanel(0.0f, tabHeight, backgroundPanel->w, backgroundPanel->h - tabHeight, lightPanelColour);
 	settingsTabs->AddTab(allSettings, allSettingsPanel);
 	backgroundPanel->AddElement(allSettingsPanel);
 
 	PopulateAllSettingsTab();
+
+    UITextButton* comfortTab = new UITextButton(0, 0, tabWidth, tabHeight, "Comfort", uiRenderer->GetLargeFont(), darkPanelColour, lightPanelColour, textLabelColour);
+    comfortSettingsPanel = new UIPanel(0, tabHeight, backgroundPanel->w, backgroundPanel->h-tabHeight, lightPanelColour);
+    settingsTabs->AddTab(comfortTab, comfortSettingsPanel);
+    backgroundPanel->AddElement(comfortSettingsPanel);
+    PopulateComfortSettingsTab();
+
+    UITextButton* guideTab = new UITextButton(0, 0, tabWidth, tabHeight, "Guide", uiRenderer->GetLargeFont(), darkPanelColour, lightPanelColour, textLabelColour);
+    UIPanel* guidePanel = new UIPanel(0, tabHeight, backgroundPanel->w, backgroundPanel->h-tabHeight, lightPanelColour);
+    settingsTabs->AddTab(guideTab, guidePanel);
+    backgroundPanel->AddElement(guidePanel);
+    PopulateGuideTab(guidePanel);
 
 	// About tab
 	UITextButton* aboutTab = new UITextButton(0.0f, 0.0f, tabWidth, tabHeight, "About", uiRenderer->GetLargeFont(), darkPanelColour, lightPanelColour, textLabelColour);
@@ -79,6 +93,7 @@ void SettingsMenu::CreateMenus()
 
 void SettingsMenu::ShowMenus(bool bShow)
 {
+    if(bShow)ReloadSettingsPages();
 	mainPanel->bVisible = bShow;
 
 	bVisible = bShow;
@@ -101,7 +116,7 @@ void SettingsMenu::NextPage(std::vector<class UIPanel*>& pages, int& currentPage
 
 	for (size_t i = 0; i < pages.size(); i++)
 	{
-		pages[i]->bVisible = currentPage == i;
+		pages[i]->bVisible = currentPage == static_cast<int>(i);
 	}
 }
 
@@ -111,15 +126,16 @@ void SettingsMenu::PrevPage(std::vector<class UIPanel*>& pages, int& currentPage
 
 	for (size_t i = 0; i < pages.size(); i++)
 	{
-		pages[i]->bVisible = currentPage == i;
+		pages[i]->bVisible = currentPage == static_cast<int>(i);
 	}
 }
 
 void SettingsMenu::SetPage(std::vector<class UIPanel*>& pages, int& page)
 {
+    page=pages.empty()?0:(std::max)(0,(std::min)(page,static_cast<int>(pages.size())-1));
 	for (size_t i = 0; i < pages.size(); i++)
 	{
-		pages[i]->bVisible = page == i;
+		pages[i]->bVisible = page == static_cast<int>(i);
 	}
 }
 
@@ -129,6 +145,8 @@ void SettingsMenu::ReloadSettingsPages()
 	SetPage(basicSettingsPages, basicSettingsPage);
 	PopulateAllSettingsTab();
 	SetPage(allSettingsPages, allSettingsPage);
+    PopulateComfortSettingsTab();
+    SetPage(comfortSettingsPages, comfortSettingsPage);
 }
 
 void SettingsMenu::GenerateSettingsTab(const std::vector<std::string>& settingNames, UIPanel* parentPanel, std::vector<class UIPanel*>& pages)
@@ -206,6 +224,9 @@ void SettingsMenu::GenerateSettingsTab(const std::vector<std::string>& settingNa
 
 UIPanel* SettingsMenu::GenerateSettingsPanel(std::string propertyName, class UIPanel* parentPanel, float y, float padding, float innerPadding)
 {
+    auto& game=Game::instance;
+    if(!SettingsPresentation::Visible(propertyName,game.c_PhysicalWeapons->Value(),
+        game.c_GripHeadFlashlight->Value(),game.c_Use3DOFAiming->Value()))return nullptr;
 	UIRenderer* uiRenderer = Game::instance.uiRenderer;
 
 	Property* propertyValue = Game::instance.config.Get(propertyName);
@@ -226,7 +247,7 @@ UIPanel* SettingsMenu::GenerateSettingsPanel(std::string propertyName, class UIP
 	Font* smallFont = uiRenderer->GetSmallFont();
 	Font* descFont = uiRenderer->GetDescriptionFont();
 
-	settingPanel->AddElement(new UILabel(innerPadding, innerPadding, propertyName, medFont, textLabelColour));
+	settingPanel->AddElement(new UILabel(innerPadding, innerPadding, SettingsPresentation::Label(propertyName), medFont, textLabelColour));
 	panelHeight += medFont->lineHeight + innerPadding;
 
 	std::string description;
@@ -239,6 +260,18 @@ UIPanel* SettingsMenu::GenerateSettingsPanel(std::string propertyName, class UIP
 
 	if (BoolProperty* boolProperty = dynamic_cast<BoolProperty*>(propertyValue))
 	{
+        if (propertyName == "StylishStandingMode") {
+            const float width=uiRenderer->CalculateStringWidth(*smallFont," Standing ");
+            UITextButton* posture=new UITextButton(settingPanel->w-width-innerPadding,innerPadding,width,labelHeight,
+                boolProperty->Value()?"Standing":"Sitting",smallFont,mediumPanelColour,lightPanelColour,textValueColour);
+            posture->onClick=[boolProperty,posture]() {
+                boolProperty->SetValue(!boolProperty->Value());
+                posture->SetText(boolProperty->Value()?"Standing":"Sitting");
+            };
+            settingPanel->AddElement(posture);
+            settingPanel->h=panelHeight;
+            return settingPanel;
+        }
 		float checkSize = smallFont->lineHeight;
 		float checkPadding = (labelHeight - checkSize) * 0.5f + innerPadding;
 		UICheckbox* button = new UICheckbox(settingPanel->w - checkSize - innerPadding, checkPadding, checkSize, boolProperty->Value(), mediumPanelColour, textValueColour);
@@ -254,11 +287,17 @@ UIPanel* SettingsMenu::GenerateSettingsPanel(std::string propertyName, class UIP
 		float boxWidth = uiRenderer->CalculateStringWidth(*smallFont, "999999999");
 		float boxHeight = smallFont->lineHeight * 1.1f;
 		float boxPadding = (labelHeight - boxHeight) * 0.5f + innerPadding;
+        if (propertyName == "StylishPlayerHeightCm")
+            intProperty->SetValue(Immersion::Layout::ClampHeight(intProperty->Value()));
 		UIIntBox* button = new UIIntBox(settingPanel->w - boxWidth - innerPadding, boxPadding, boxWidth, boxHeight, intProperty->Value(), smallFont, mediumPanelColour, lightPanelColour, textValueColour);
 
-		button->onClick = [intProperty, button]() {
-			intProperty->SetValue(button->intValue);
-		};
+        button->onClick = [intProperty, button, propertyName]() {
+            if (propertyName == "StylishPlayerHeightCm") {
+                button->intValue=Immersion::Layout::ClampHeight(button->intValue);
+                button->SetText(std::to_string(button->intValue));
+            }
+            intProperty->SetValue(button->intValue);
+        };
 
 		settingPanel->AddElement(button);
 	}
@@ -328,13 +367,36 @@ void SettingsMenu::PopulateBasicSettingsTab()
 {
 	std::vector<std::string> basicSettingsList = {
 		"LeftHanded",
+        "StylishWorldScale",
+        "StylishFirstPersonVehicles",
+		"StylishPhysicalWeapons",
+		"StylishHolsterMarkers",
+		"StylishShoulderRadius",
+		"StylishHipRadius",
+		"StylishGripHeadFlashlight",
+		"StylishGripHeadFlashlightRadius",
+        "StylishPhysicalGrenades",
+        "StylishGrenadeThrowStrength",
+        "StylishARSpreadScale",
+        "StylishVehicleEyeHeight",
+        "StylishGhostEyeLift",
+        "ScorpionViewHeight", "ScorpionViewForward",
+        "BansheeViewHeight", "BansheeViewForward",
+        "StylishTurretSensitivity",
+        "StylishShadeEyeLift",
+        "OnFootLegs",
+        "GhostAimSensitivity",
+        "StylishRecoilScale",
+        "StylishSupportedRecoilFraction",
+        "StylishGrenadeGripHeightOffset",
+        "StylishScopeMagnification",
+        "StylishManualReload",
+        "StylishReloadSoundVolume",
+        "StylishShotgunShellRatio",
 		"SnapTurn",
 		"SnapTurnAmount",
 		"SmoothTurnAmount",
-		"HorizontalVehicleTurnAmount",
-		"VerticalVehicleTurnAmount",
 		"HandRelativeMovement",
-		"EnableWeaponHolsters",
 		"ShowCrosshair",
 		"ShowRoomCentre",
 		"RoomScaleMovement"
@@ -358,6 +420,30 @@ void SettingsMenu::PopulateBasicSettingsTab()
 		this->NextPage(basicSettingsPages, basicSettingsPage);
 	};
 	basicSettingsPanel->AddElement(nextButton);
+}
+
+
+void SettingsMenu::PopulateComfortSettingsTab()
+{
+	std::vector<std::string> comfortSettingsList = {"StylishStandingMode", "StylishPlayerHeightCm"};
+	// Clear out everything in case this is a refresh after reverting
+	comfortSettingsPanel->DeleteChildren();
+
+	comfortSettingsPages.clear();
+
+	GenerateSettingsTab(comfortSettingsList, comfortSettingsPanel, comfortSettingsPages);
+
+	UIImageButton* prevButton = new UIImageButton(0.0f, 0.0f, settingArrowWidth, comfortSettingsPanel->h, prevPageButtonImage);
+	prevButton->onClick = [this]() {
+		this->PrevPage(comfortSettingsPages, comfortSettingsPage);
+	};
+	comfortSettingsPanel->AddElement(prevButton);
+
+	UIImageButton* nextButton = new UIImageButton(comfortSettingsPanel->w - settingArrowWidth, 0.0f, settingArrowWidth, comfortSettingsPanel->h, nextPageButtonImage);
+	nextButton->onClick = [this]() {
+		this->NextPage(comfortSettingsPages, comfortSettingsPage);
+	};
+	comfortSettingsPanel->AddElement(nextButton);
 }
 
 
@@ -385,13 +471,49 @@ void SettingsMenu::PopulateAllSettingsTab()
 	allSettingsPanel->AddElement(nextButton);
 }
 
+void SettingsMenu::PopulateGuideTab(UIPanel* guidePanel)
+{
+    auto* renderer=Game::instance.uiRenderer;
+    auto* bodyFont=renderer->GetMediumFont();
+    guidePages.clear();guidePage=0;
+    const float margin=20,numberWidth=30,bodyWidth=guidePanel->w-2*margin-numberWidth;
+    for(unsigned n=0;n<StylishGuide::Pages.size();++n){
+        const auto& content=StylishGuide::Pages[n];
+        auto* page=new UIPanel(0,0,guidePanel->w,guidePanel->h,lightPanelColour);
+        page->bVisible=n==0;guidePages.push_back(page);guidePanel->AddElement(page);
+        page->AddElement(new UILabel(margin,12,content.title,renderer->GetLargeFont(),textLabelColour));
+        page->AddElement(new UIPanel(margin,50,guidePanel->w-2*margin,2,textLabelColour));
+        float y=62;
+        for(unsigned step=0;step<content.steps.size();++step){
+            page->AddElement(new UILabel(margin,y,std::to_string(step+1)+".",bodyFont,textLabelColour));
+            std::istringstream words(content.steps[step]);std::string word,line;
+            while(words>>word){
+                const std::string next=line.empty()?word:line+" "+word;
+                if(!line.empty() && renderer->CalculateStringWidth(*bodyFont,next.c_str())>bodyWidth){
+                    page->AddElement(new UILabel(margin+numberWidth,y,line,bodyFont,textValueColour));
+                    y+=bodyFont->lineHeight;line=word;
+                }else line=next;
+            }
+            if(!line.empty())page->AddElement(new UILabel(margin+numberWidth,y,line,bodyFont,textValueColour));
+            y+=bodyFont->lineHeight+6;
+        }
+        const float footer=guidePanel->h-40;
+        auto* prev=new UITextButton(margin,footer,120,32,"Previous",renderer->GetSmallFont(),darkPanelColour,mediumPanelColour,textValueColour);
+        prev->onClick=[this](){PrevPage(guidePages,guidePage);};page->AddElement(prev);
+        page->AddElement(new UILabel(255,footer+6,std::to_string(n+1)+" / "+std::to_string(StylishGuide::Pages.size()),renderer->GetSmallFont(),textLabelColour));
+        auto* next=new UITextButton(guidePanel->w-margin-120,footer,120,32,"Next",renderer->GetSmallFont(),darkPanelColour,mediumPanelColour,textValueColour);
+        next->onClick=[this](){NextPage(guidePages,guidePage);};page->AddElement(next);
+    }
+}
+
 void SettingsMenu::PopulateAboutTab(UIPanel* aboutPanel)
 {
 	std::stringstream aboutStream;
 
+	aboutStream << "Original mod: LivingFray " << MOD_VERSION << std::endl;
 	aboutStream << "Halo Edition: " << (Game::instance.bIsCustom ? "Custom Edition" : "Retail") << std::endl;
 	aboutStream << "Halo Version: " << Helpers::GetVersionString() << std::endl;
-	aboutStream << "Mod Version: " << MOD_VERSION << std::endl;
+	aboutStream << "Immersion Evolved: 0.1.0-alpha.1 / R1.37" << std::endl;
 	aboutStream << "Chimera: " << (Game::instance.bDetectedChimera ? "" : "NOT ") << "installed" << std::endl;
 	aboutStream << "First launch: " << (Game::instance.bLoadedConfig ? "False" : "True") << std::endl;
 	aboutStream << "Config file: " << (Game::instance.bSavedConfig ? "Writeable" : "!!!Not Writeable!!!") << std::endl;

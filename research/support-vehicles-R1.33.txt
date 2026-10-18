@@ -1,0 +1,40 @@
+R1.33 private maintenance update - 14 October 2026
+
+Evidence: Ryan confirmed all R1.32 changes working, then reported support-hand
+skin pose shifting after trigger-hand release. Requested tank view over its
+barrel and Banshee forward view, with RT primary/LT secondary.
+
+Root cause in current source: support-only weapon tracking already exists in
+InputHandler. WeaponHandler drops bUseTwoHandAim / compact support during that
+transition, cancelling the native gun rotation and returning the support wrist
+to free tracking. Keep the bracing skin relative to the final gun matrix and
+retain its long-gun rotation mode until detached. Snapshot only support wrist
+and descendants, excluding gun descendants; reject changed identities/topology,
+handedness, invalid matrices and singular anchors. Clear on normal detachment.
+No gameplay ownership, recoil, reload or physical aiming changes.
+
+Vehicle reader uses existing validated retail object/model layouts. Scorpion
+is driver-only, never an external passenger. Prefer a bounded named turret,
+then cannon/gun node; verify its rendered world transform and distance. Actual
+native node names are not available here. Missing nodes use the rendered
+chassis plus a configurable elevation. Banshee is driver/pilot or sole seat0.
+Both use same-frame rendered vehicle transforms, with simulation fallback only
+when rendering data is unavailable. World Scale converts all configured metres.
+
+No new hooks, native addresses, model/assets, action bindings or PVS overrides.
+Existing vehicle render/culling, draw-local head removal, exit guard and native
+Pelican cinematic handoff remain. Tank view yaw follows the turret (native aim
+fallback), pitch follows native aim; Banshee follows rendered aircraft yaw and
+pitch with no camera roll. Native Move action and original vehicle look rates
+remain; BeginView adds vehicle heading only once. RT/LT primary/secondary maps
+also apply when the first-person camera option is disabled.
+
+Tests: production support posing plus transform fixtures in both layouts;
+compact/long hand and finger retention after arbitrary rotation/translation;
+pose identity, topology, singular-anchor and detach rejection; synthetic native
+seat/model reads; both vehicle cameras at 1.0/0.8 world scale; rendered-vs-sim
+jitter; tank fallback; pitch without roll; trigger combinations; preserved
+movement; camera-off mapping; entry/exit transitions; prior regression suite.
+Tests use native/VR/API doubles, not Halo. MSVC compilation, actual tank turret
+node choice, canopy clearance, reticles, model appearance and comfort still
+require in-game headset validation. No Windows DLL produced here.

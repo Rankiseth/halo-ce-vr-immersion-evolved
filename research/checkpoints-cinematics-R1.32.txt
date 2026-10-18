@@ -1,0 +1,59 @@
+R1.32 private maintenance update - 14 October 2026
+
+Evidence
+The supplied inject(20261014-173033).log identifies R1.31b. It contains 32
+physical-weapon initializations; some rebuild the same surviving weapon datums
+into different homes. Only one explicit loading status was logged. That log
+does not record the earlier player's storage address or age, so it cannot
+prove which reset predicate fired each time. This patch addresses both the
+explicit loading reset and the storage-address reset, with session snapshots
+logged at subsequent initializations to make follow-up diagnosis possible.
+
+Ownership
+Temporary campaign loading pauses keep the active ownership session and input
+ownership, with native weapon actions disabled until a valid read returns.
+WeaponSession no longer considers a relocated storage address a new session.
+Salted unit/player changes and backwards age still reset ownership. Native
+weapon selection/hiding is reapplied at a relocated address. Reload records
+use the same unit/player/age rule. Inventory membership reconciliation and
+verified native mutations remain in place. Suspension does not synthesize a
+grip release, pickup or throw; the first valid sample establishes a baseline.
+
+Reload grips
+Rifle and sniper action acquisition requires a fresh press with an empty
+offhand. Becoming empty while support grip stays down cannot transfer that
+hand, even if recoil/tracking puts it inside the charging-handle radius.
+The deliberate Magnum free-slide transfer and required shotgun support/pump
+transfer are unchanged. No optional AR/sniper free charging is restored.
+
+Cameras
+Cutscene horizontal turning runs once per render frame on PhysicalLook, using
+the existing smooth/snap settings. It changes only VR yaw; the native scripted
+camera still receives zero HMD correction. Pelican seated view already owns
+stick look and is excluded from the additional cinematic turn, preventing
+double turning. Menu/recenter input is polled even without gameplay callbacks.
+An explicit held-Y request resets position/height and facing. Automatic
+loading recenter does not reset orientation. Native cinematic forward is the
+reference in a movie; gameplay uses current native facing and vehicle seats
+retain their own recalibration.
+
+Pelican detection uses the original frustum BEFORE stereo/VR edits. While a
+cinematic is active, bars, body visibility and distance from the seated head
+keep external scenery native. A non-body-drawing camera within 1.25 metres of
+the Pelican head may hand off once the bars are gone; normal gameplay can also
+hand off. Nearby first-person dismounts retain the prior exit blend (2 metres).
+No mission timer, cutscene script override, PVS modification or new native
+address is added. Camera mode changes log once per transition, not per frame.
+
+Verification and limits
+Portable tests execute production methods against native/VR/API doubles with
+undefined-behavior sanitization. Coverage includes both firing hands, support
+retention through empty ammo, reload records after relocation, load pause and
+real subsequent release, true player/age resets, smooth/snap cinematic turns,
+held-Y requests, facing reset, external Pelican shots, seated handoff, and
+vehicle exit smoothing. Guide text is checked against the bundled font.
+No Windows/MSVC DLL build, Halo mission or headset run was performed here.
+Actual cinematic flags/proximity at each mission's white-flash handoff need
+in-game confirmation: Silent Cartographer, 343 Guilty Spark, Truth and
+Reconciliation and Assault on the Control Room. The heuristic deliberately
+prefers the native shot while it is still recognizably external.

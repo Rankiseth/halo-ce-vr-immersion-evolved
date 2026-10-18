@@ -1,0 +1,71 @@
+R1.35 - vehicle directions, cinematic handoff, third-person choice
+14 October 2026
+
+Observed evidence
+Ryan's new inject.log identifies R1.34 and reports Scorpion kind=6 with
+both muzzle reads and barrel/turret anchor valid. Thus the old fallback is
+not the explanation in that session. Ryan confirms the turret clipping fix
+works and reports both weapons above the reticle. Banshee is not retested.
+The log records a cinematic with a manual Y recenter and a subsequent
+native scenery -> gameplay handoff. It does not record the actual native
+or HMD yaw, so it cannot independently prove the reported wrong direction.
+
+Sight correction
+R1.34 placed muzzle + direction * CrosshairDistance in world space. From
+an eye above that muzzle, a 15m point appears below the parallel firing
+line at longer distances. R1.35 displays eye + direction * displayDepth.
+The HUD remains in local metres and existing OpenVR conversion supplies
+world scale once. Pitch/height/lean no longer create an artificial weapon
+zero at the overlay depth. This is a direction sight, not an impact trace.
+
+R1.34 also incorrectly used weapon deviation as a cone between the marker
+axis and owner aim. Native conceptual firing order starts from unit aim for
+an aimable weapon, then applies player aim assistance inside a cone about
+that initial direction. A fixed-direction trigger uses its marker. The new
+reader retains all checked marker/weapon/trigger reads and drops that extra
+clamp. The original Scorpion camera code is unchanged.
+
+Primary source consulted for firing semantics:
+https://github.com/bnunu/halo-1/blob/2e376b992e920bcc3a094727475c17daef71ec8c/source/game/aim_assist.c
+https://github.com/bnunu/halo-1/blob/main/source/items/weapons.c
+https://github.com/bnunu/halo-1/blob/main/source/units/units.c
+These are conceptual Xbox decompilation references, NOT PC address/ABI
+sources. No functions from them are called, copied or patched here.
+Native spread and aim assistance can still deflect an individual projectile.
+
+Cinematic transition
+The previous view yaw was cinematic-relative, but after bInCutscene became
+false it was interpreted as absolute world yaw. Normal gameplay input could
+then rotate the player back toward that old VR heading. R1.35 observes edges
+in BOTH UpdateCamera and PreDrawFrame. Input returns zero while the reset is
+pending. Before BeginView/stereo, entry aligns the HMD to relative yaw zero;
+exit aligns it to Helpers::GetInputData().yaw, an existing native control
+field. This avoids using the last cinematic shot or an interpolated frustum
+as the gameplay heading. It then recentres position/height, clears seat/exit
+state, synchronizes LastLookDir and suppresses the next roomscale move.
+Resets defer through tracking loss, loading and menus; they run once per edge.
+Native cinematic shots and the Pelican seat handoff keep their original path.
+Held sticks are rearmed at neutral to avoid an immediate accidental snap.
+
+Third-person preference
+Reuse StylishFirstPersonVehicles, already registered and saved in config.
+Move it immediately below World Scale in Basic; describe ON/OFF and Save.
+Disabling restores a saved view and clears seat state, pitch and exit blending
+without entering the normal dismount path. Game::UpdateCamera routes seated
+third-person players to vehicle input even if Chief carries a hand weapon.
+Third-person reticles also use native camera aim instead of a carried hand
+weapon. Camera/control behaviour otherwise uses the existing fallback.
+No new config key, asset, binding, native address, hook or project file.
+
+Validation
+Portable production functions run with UBSan and native/VR/API doubles.
+Tests include input-before-render and render-before-input transitions,
+20 combinations of target yaw/Chimera/order, held sticks, one-time resets,
+loading/menu/tracking deferral, malformed yaw, native vehicle input routing,
+all seven supported seat toggles while a menu and saved cockpit are active,
+Scorpion pitch clearance, both weapon directions, head lean, depth and scale.
+The full runner also checks the retained thumb/support, reload, inventory,
+HUD, native reader and stereo functionality. See validation-R1.35.txt.
+No Windows/MSVC build or in-game/headset run is claimed. Exact native aim
+assistance, shot alignment, cinematic flags and third-person camera comfort
+remain runtime checks. The source package includes no precompiled DLL.

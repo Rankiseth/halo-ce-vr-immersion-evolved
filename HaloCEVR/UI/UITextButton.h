@@ -13,6 +13,8 @@ public:
 
 	UITextButton(float x, float y, float w, float h, std::string text, Font* font, DWORD inactiveColour, DWORD activeColour, DWORD textColour);
 
+	void SetText(const std::string& value);
+
 	virtual void Draw(class UIRenderer* renderer) override;
 
 protected:

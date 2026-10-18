@@ -1,0 +1,44 @@
+R1.37 portable validation - 18 October 2026
+
+1128 posture calibration, fixed shoulder, mirrored zones and display-anchor checks passed
+596 body-outline geometry and native first-person depth checks passed
+Interaction model: 571 checks passed
+46030 holster-hover, menu-input and glove-mesh checks passed
+175 native-session transaction checks passed (engine double, not Halo)
+232 headset look-history checks passed
+281 native model bind-pose/hand-placement checks passed
+324 anatomical palm, finger-chain and mirrored grip checks passed
+39 marker size/placement and grey-render restoration checks passed
+456 native recording segmentation, stable-snapshot and corruption-recovery checks passed
+4464 production PCM queue, level-limiting and buffer-lifetime checks passed (WinMM doubles)
+13 production frame-based tutorial headset/stick and reset checks passed
+2978 production cinematic input and wrapped yaw checks passed
+3321 production compact/long support-transfer pose and firing-hand aim checks passed
+23924 production guide navigation and bundled-font layout checks passed
+71 native reload audio guard/rollback/lifetime checks passed (native-call doubles)
+235969 production manual-reload interaction, ammo and drawing checks passed (engine/VR doubles)
+42525 production grenade/vehicle/rocket-grasp checks passed (VR/native doubles)
+9 production vehicle HUD placement/fallback checks passed
+60 production body-model lifecycle/placement checks passed
+88 production HUD anchor/health preservation checks passed
+Production flashlight method with engine doubles: 166 checks passed
+1924 production physical-input checks passed (engine/VR doubles)
+171 production X/RT menu, reload separation, trigger suppression and native Escape checks passed (Win32/VR doubles)
+12 production stereo raster-projection and body-depth checks passed
+17 production solid-mesh render-state checks passed
+170 production belt-label geometry and draw-state checks passed (no GPU)
+1926 recoil timing, accumulation and shot-observation checks passed
+95704 production recoil/fire/aim/cache checks passed (engine doubles)
+36 production weapon-model cache checks passed
+9458 production native-reader/pickup checks passed (synthetic memory)
+24 production controller-to-menu checks passed (OpenVR doubles)
+4974 production OpenVR physical-binding checks passed (VRInput double)
+62 production world-scale, stereo separation and live headset translation checks passed
+Physical grip, trigger and fixed-hand button actions verified in all four controller profiles
+Fixed left/right vehicle sticks verified in all four controller profiles
+
+Final Liberation Sans 2.1.5 verification:
+23924 production guide navigation and bundled-font layout checks passed
+89 production Comfort controls, text alignment, height bounds and config persistence checks passed
+
+No Windows/MSVC build or live headset test was performed.

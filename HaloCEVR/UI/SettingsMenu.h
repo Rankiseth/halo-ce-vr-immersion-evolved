@@ -20,8 +20,12 @@ public:
 
 	bool bVisible = false;
 
+	int comfortSettingsPage = 0;
+	std::vector<class UIPanel*> comfortSettingsPages;
 	int basicSettingsPage = 0;
 	std::vector<class UIPanel*> basicSettingsPages;
+	int guidePage = 0;
+	std::vector<class UIPanel*> guidePages;
 	int allSettingsPage = 0;
 	std::vector<class UIPanel*> allSettingsPages;
 
@@ -46,14 +50,17 @@ protected:
 	class UIPanel* mainPanel = nullptr;
 	class UIPanel* backgroundPanel = nullptr;
 	class UITabPanel* settingsTabs = nullptr;
+	class UIPanel* comfortSettingsPanel = nullptr;
 	class UIPanel* basicSettingsPanel = nullptr;
 	class UIPanel* allSettingsPanel = nullptr;
 
 	void GenerateSettingsTab(const std::vector<std::string>& settingNames, class UIPanel* parentPanel, std::vector<class UIPanel*>& pages);
 	class UIPanel* GenerateSettingsPanel(std::string propertyName, class UIPanel* parentPanel, float y, float padding, float innerPadding);
 	
+	void PopulateComfortSettingsTab();
 	void PopulateBasicSettingsTab();
 	void PopulateAllSettingsTab();
+	void PopulateGuideTab(class UIPanel* guidePanel);
 	void PopulateAboutTab(class UIPanel* aboutPanel);
 };
 

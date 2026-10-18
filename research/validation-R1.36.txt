@@ -1,0 +1,4 @@
+Baseline R1.35 fails the new last-shot slide-position regression as expected.
+235005 production manual-reload interaction, ammo and drawing checks passed (engine/VR doubles)
+Compiled with g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined.
+Windows/MSVC compilation and headset testing pending.

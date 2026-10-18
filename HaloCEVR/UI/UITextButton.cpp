@@ -19,6 +19,12 @@ UITextButton::UITextButton(float x, float y, float w, float h, std::string text,
 	textY = (h - font->lineHeight) * 0.5f;
 }
 
+void UITextButton::SetText(const std::string& value)
+{
+    text=value;
+    textX=(w-Game::instance.uiRenderer->CalculateStringWidth(*font,text.c_str()))*0.5f;
+}
+
 void UITextButton::Draw(UIRenderer* renderer)
 {
 	float pX, pY;
