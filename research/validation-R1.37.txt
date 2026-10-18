@@ -49,3 +49,13 @@ and Sitting/Standing holster settings behaving correctly. This report is
 separate from the portable automated checks above. Tested binary and compiler
 output have not yet been supplied; individual regression edge cases were not
 separately reported.
+
+Artifact verification update, 2026-10-18:
+Maintainer supplied the Win32 update ZIP from Build-ImmersionEvolved.ps1.
+All 31 original manifest hashes and ZIP CRC passed. The DLL is x86 PE32 with
+R1.37/alpha.1 and both posture-setting identifiers. All 28 unchanged packaged
+files match source; the original README and release notes are older versions.
+DLL SHA-256: f3fc74821ffd754a5331689a8776239755b9a84b094c86d2b2e17e626f8a27c6
+Release repackaging preserves the DLL and every runtime asset byte-for-byte,
+updates documentation and checksums, and normalizes ZIP path separators.
+Compiler output was not supplied; no independent Windows rebuild performed.

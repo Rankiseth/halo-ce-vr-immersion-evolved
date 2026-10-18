@@ -1,0 +1,43 @@
+Halo CE VR - Immersion Evolved v0.1.0-alpha.1 (R1.37)
+Win32 update installation
+
+REQUIRES
+- Original Halo PC retail patched to 1.10 (01.00.10.0621).
+- An existing working HaloCEVR installation with its 32-bit openvr_api.dll.
+- SteamVR and tracked controllers.
+- Microsoft Visual C++ v14 Redistributable, x86 edition:
+  https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
+
+INSTALL
+1. Close Halo. Back up your working game folder, including VR/config.txt.
+2. Extract the update ZIP to a temporary folder.
+3. Copy all extracted contents into the folder containing halo.exe.
+   Replace the files included in the update and merge the VR folders.
+4. Keep your existing openvr_api.dll and VR/config.txt. Neither file is included
+   in this update. Do not put d3d9.dll into Windows/System32 or SysWOW64.
+5. Start SteamVR and launch Halo using your existing working setup.
+6. Hold X, then press RT to open the VR menu; in the Ghost, tap Y.
+   About should show 0.1.0-alpha.1 / R1.37.
+7. Under Comfort, choose Sitting (default) or Standing. Player height is in cm
+   and affects Standing only. At 180 cm, the belt is 60 cm below the headset.
+   Select Save to retain your settings.
+
+MAGNUM
+With Manual Reload enabled, the slide locks fully back when the magazine is
+empty. Eject, insert a fresh magazine, then complete the slide pull/release to
+chamber it. Tactical reload behavior is retained.
+
+ROLLBACK
+Close Halo and restore the complete working folder backup, including its DLL,
+VR assets, and configuration.
+
+ALPHA SCOPE
+The maintainer confirmed R1.37 in-headset, including the Magnum empty-slide
+lock and Sitting/Standing settings. Custom Edition, SPV3, multiplayer, and
+individual edge cases are not validated for this alpha. MCC is not supported.
+This is an update package, not a complete Halo or HaloCEVR installer.
+
+CREDITS
+Original VR mod: LivingFray and contributors. Immersion Evolved: Rankiseth.
+Keep PERMISSIONS.md, CREDITS.md, THIRD_PARTY_NOTICES.md, and LICENSES with this
+package. See RELEASE_NOTES.md for details and SHA256.txt for file checksums.

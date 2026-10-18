@@ -1,0 +1,25 @@
+{
+  "release": "v0.1.0-alpha.1",
+  "revision": "R1.37",
+  "asset_filename": "HaloCEVR-Immersion-Evolved-v0.1.0-alpha.1-R1.37-Win32-Update.zip",
+  "asset_bytes": 1539355,
+  "asset_sha256": "f03ae6d77fc0bea52a80df363ba7547e05e95d053a85ac2a5948e49824faf4b8",
+  "maintainer_uploaded_zip_sha256": "7435aae5859e5739440c5a74c4ee68fca9987d131836c3d52c95be9b417a35d9",
+  "dll_sha256": "f3fc74821ffd754a5331689a8776239755b9a84b094c86d2b2e17e626f8a27c6",
+  "dll_bytes": 805376,
+  "dll_architecture": "Win32/x86 PE32",
+  "archive_crc": "passed",
+  "packaged_file_checksums": 32,
+  "preserved_runtime_files": 17,
+  "runtime_bytes_changed": false,
+  "repack_changes": [
+    "README.md updated for binary package",
+    "RELEASE_NOTES.md updated with maintainer report and artifact checks",
+    "INSTALL.txt added",
+    "SHA256.txt regenerated",
+    "ZIP entry separators normalized to forward slashes"
+  ],
+  "headset_test": "Rankiseth confirmed core R1.37 behavior, Magnum empty-slide lock and Sitting/Standing settings on 2026-10-18.",
+  "compiler_output_received": false,
+  "independent_rebuild": false
+}

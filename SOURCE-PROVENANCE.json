@@ -58,7 +58,8 @@
     "23924 production guide navigation and bundled-font layout checks passed (final Liberation Sans 2.1.5 check)",
     "89 production Comfort controls, text alignment, height bounds and config persistence checks passed",
     "Portable validation completed before the maintainer headset test; no Windows build was performed by Codex.",
-    "2026-10-18: Rankiseth reports R1.37 works in-headset, including the Magnum empty-slide lock and Sitting/Standing holster settings."
+    "2026-10-18: Rankiseth reports R1.37 works in-headset, including the Magnum empty-slide lock and Sitting/Standing holster settings.",
+    "2026-10-18: Uploaded Win32 update verified: x86 DLL, R1.37 markers, original manifest hashes, and packaged assets; tested DLL preserved unchanged during release packaging."
   ],
   "binary_profile": {
     "edition": "Halo PC retail (halor)",
@@ -101,13 +102,13 @@
       "RetailSeatCamera",
       "RetailGrenadeCommand"
     ],
-    "status": "Existing executable signatures retained; no new hook or executable address. Rankiseth reports the core R1.37 headset checks passed; tested binary and compiler output not yet archived."
+    "status": "Existing executable signatures retained; no new hook or executable address. Maintainer headset report received; uploaded Win32 DLL and packaged assets statically verified. No independent Windows rebuild was performed."
   },
   "limitations": [
-    "No precompiled DLL is included. The maintainer-tested binary and compiler output have not yet been supplied for release artifact verification.",
+    "The maintainer-supplied binary passed static package checks; compiler output was not supplied and no independent Windows rebuild was performed.",
     "Custom Edition/SPV3 and multiplayer are not validated for this alpha."
   ],
-  "distribution": "Development source for an unofficial PCVR fork; core headset checks reported passed by the maintainer; no binary release included.",
+  "distribution": "Source for an unofficial PCVR fork with a maintainer-tested Win32 update package prepared for an alpha pre-release; publication tracked on GitHub Releases.",
   "changed_files": [
     "Build-ImmersionEvolved.ps1",
     "Build-Restart-R1.ps1",
@@ -226,8 +227,20 @@
       "Magnum slide locks back when empty",
       "Sitting/Standing holster settings behave correctly"
     ],
-    "binary_artifact_received": false,
+    "binary_artifact_received": true,
     "compiler_output_received": false,
     "scope": "Individual edge cases in the detailed release checklist were not separately reported."
+  },
+  "binary_artifact": {
+    "filename": "HaloCEVR-Immersion-Evolved-v0.1.0-alpha.1-R1.37-Win32-Update.zip",
+    "uploaded_zip_sha256": "7435aae5859e5739440c5a74c4ee68fca9987d131836c3d52c95be9b417a35d9",
+    "dll_sha256": "f3fc74821ffd754a5331689a8776239755b9a84b094c86d2b2e17e626f8a27c6",
+    "dll_bytes": 805376,
+    "architecture": "Win32/x86 PE32 DLL",
+    "verification": "Archive CRC, all 31 original file hashes, version/settings markers, and 28 unchanged packaged files matched source; original README and release notes were older revisions. Release packaging updates documentation, ZIP path separators and checksums only.",
+    "compiler_log_supplied": false,
+    "independent_rebuild": false,
+    "release_zip_sha256": "f03ae6d77fc0bea52a80df363ba7547e05e95d053a85ac2a5948e49824faf4b8",
+    "release_zip_bytes": 1539355
   }
 }

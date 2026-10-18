@@ -1,7 +1,7 @@
 # Halo CE VR - Immersion Evolved v0.1.0-alpha.1 (R1.37)
 
-Release preparation. Core headset checks passed according to Rankiseth;
-the tested binary and build output are still needed for release packaging.
+First Immersion Evolved alpha package for the original PC version of Halo CE.
+**Update package:** install over an existing working HaloCEVR installation.
 
 An unofficial PCVR derivative of LivingFray's HaloCEVR, built on the existing
 Immersion Evolved / Stylish Restart work. Requires the original Halo PC retail
@@ -34,26 +34,45 @@ their previous behavior. Manual Reload must be enabled.
 
 Rankiseth confirmed that R1.37 works in-headset and that both the Magnum
 empty-slide lock and Sitting/Standing holster settings behave correctly.
-This is a maintainer-reported runtime result. The tested binary and compiler
-output have not yet been supplied for artifact verification.
+The maintainer-supplied update ZIP passed archive integrity, file checksum,
+x86 DLL, R1.37 marker, and packaged-asset checks. The tested DLL is preserved
+byte-for-byte in the release package. A compiler log was not supplied;
+this verification is not a reproducible-build attestation.
 
-The report confirms those core behaviors; individual height extremes,
-left/right-handed variants, persistence, and partial-rack cases below were
-not separately reported.
+The report confirms those core behaviors. Individual height extremes,
+left/right-handed variants, persistence, and partial-rack cases were not
+separately reported. Custom Edition, SPV3, and multiplayer remain unvalidated.
 
-## Detailed release regression checklist
+## Install
 
-1. Build with Visual Studio 2022 x86 and keep the compiler output.
-2. Confirm About shows v0.1.0-alpha.1 / R1.37 and the log marker is R1.37.
-3. In Sitting, vary height: hip, Magazine Zone, and shoulder preview stay fixed.
-4. In Standing at 180 cm, test both weapon holsters and magazine pickup/insertion.
-5. Check 120/150/180/220 cm and both handedness preferences; visual and grab
-   positions should agree. The shoulder grab remains at the shoulder.
-6. Change posture while holding a gun, then resume. No unintended shot, draw,
-   stow, or drop should occur. Save, restart, and verify the settings persist.
-7. Verify the Magnum empty-slide sequence in both hands, including partial
-   pulls, magazine insertion, and re-holstering.
-8. Check all five settings tabs and the eleven Guide pages for readable text.
+1. Close Halo and back up the working game folder and `VR/config.txt`.
+2. Extract the **Win32-Update.zip** asset and copy its contents beside `halo.exe`,
+   replacing included files and merging the `VR` folders.
+3. Keep your existing 32-bit `openvr_api.dll` and `VR/config.txt`.
+4. Start SteamVR and Halo. Open **Comfort** for Sitting/Standing and height in cm.
 
-Report issues against Immersion Evolved with the revision and reproduction
-steps; avoid sending fork-specific support requests to LivingFray.
+The Microsoft Visual C++ v14 **x86** Redistributable is required by the DLL.
+See [Microsoft's runtime downloads](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist).
+The package includes INSTALL.txt and a per-file SHA256.txt manifest.
+GitHub's automatic source ZIP and tarball do not contain an installable DLL.
+
+## Credits and permission
+
+Based on [LivingFray's HaloCEVR](https://github.com/LivingFray/HaloCEVR).
+LivingFray's public invitation to fork/reuse the code is documented in
+[PERMISSIONS.md](https://github.com/Rankiseth/halo-ce-vr-immersion-evolved/blob/master/PERMISSIONS.md),
+with the original message link and supplied screenshot. Dependency notices
+are retained. This is an unofficial community derivative; no blanket standard
+license is asserted for inherited code. No game files or extracted game audio
+are included.
+
+## Binary identity
+
+The tested `d3d9.dll` is 805,376 bytes, Win32/x86. SHA-256:
+
+```text
+f3fc74821ffd754a5331689a8776239755b9a84b094c86d2b2e17e626f8a27c6
+```
+
+Please report the revision and reproduction steps to the Immersion Evolved
+maintainer for alpha feedback.

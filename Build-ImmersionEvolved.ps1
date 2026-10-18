@@ -35,9 +35,10 @@ Copy-Item (Join-Path $root 'Extras\Bindings\*') $bindings -Recurse -Force
 Get-ChildItem $bindings -Filter '*.py' | Remove-Item -Force
 Copy-Item (Join-Path $root 'Extras\Fonts') (Join-Path $package 'VR\Fonts') -Recurse -Force
 Copy-Item (Join-Path $root 'Extras\Images') (Join-Path $package 'VR\Images') -Recurse -Force
-foreach ($notice in @('README.md','RELEASE_NOTES.md','PERMISSIONS.md','CREDITS.md','THIRD_PARTY_NOTICES.md','RESTART-R1-README.txt','STYLISH-RESTART.md')) {
+foreach ($notice in @('INSTALL.txt','RELEASE_NOTES.md','PERMISSIONS.md','CREDITS.md','THIRD_PARTY_NOTICES.md','RESTART-R1-README.txt','STYLISH-RESTART.md')) {
     Copy-Item (Join-Path $root $notice) $package -Force
 }
+Copy-Item (Join-Path $root 'docs\PACKAGE_README.md') (Join-Path $package 'README.md') -Force
 Copy-Item (Join-Path $root 'LICENSES') (Join-Path $package 'LICENSES') -Recurse -Force
 New-Item -ItemType Directory -Force -Path (Join-Path $package 'docs') | Out-Null
 Copy-Item (Join-Path $root 'docs\permissions') (Join-Path $package 'docs\permissions') -Recurse -Force

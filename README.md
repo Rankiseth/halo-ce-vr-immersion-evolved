@@ -2,7 +2,7 @@
 
 # Halo CE VR - Immersion Evolved
 
-**v0.1.0-alpha.1 / R1.37 - development source**
+**v0.1.0-alpha.1 / R1.37**
 
 An unofficial community derivative of [LivingFray's HaloCEVR](https://github.com/LivingFray/HaloCEVR)
 for the original Windows PC version of Halo: Combat Evolved. Built around
@@ -11,16 +11,17 @@ Maintained by [**Rankiseth**](https://github.com/Rankiseth/halo-ce-vr-immersion-
 in [CREDITS.md](CREDITS.md).
 
 **Rankiseth confirmed R1.37 working in-headset on 2026-10-18**, including the
-Magnum empty-slide lock and Sitting/Standing holster settings. The tested binary
-and compiler output have not yet been archived for the release. This source
-package does not include a compiled d3d9.dll. See [release notes](RELEASE_NOTES.md).
+Magnum empty-slide lock and Sitting/Standing holster settings. The maintainer-built Windows update ZIP has passed archive, checksum,
+x86 DLL, version-marker, and packaged-asset checks. See
+[release notes](RELEASE_NOTES.md) and [installation instructions](INSTALL.txt).
 
 ## Requirements
 
 - A legitimate installation of Halo PC retail, patched to 1.10 (01.00.10.0621).
 - An existing working HaloCEVR installation, including its 32-bit openvr_api.dll.
 - SteamVR and tracked controllers. Quest-style controls are described below.
-- Visual Studio 2022 with Desktop development with C++ and a Windows SDK to build.
+- [Microsoft Visual C++ v14 Redistributable (x86)](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist): the DLL uses the MSVC runtime.
+- To build from source only: Visual Studio 2022 with Desktop development with C++ and a Windows SDK.
 
 MCC is not supported. The modified physical-interaction path targets retail
 Halo PC; Custom Edition, SPV3, and multiplayer are not validated for this alpha.
@@ -38,7 +39,23 @@ Halo PC; Custom Edition, SPV3, and multiplayer are not validated for this alpha.
   stays fixed; its belt preview and label move with the belt.
 - Existing R1.35 vehicle sights, camera choice, and cinematic transition refinements.
 
-## Build and install the update
+## Install the Win32 update
+
+Use the `HaloCEVR-Immersion-Evolved-v0.1.0-alpha.1-R1.37-Win32-Update.zip`
+release asset. GitHub's automatic source archives are for development.
+
+1. Close Halo and back up your working installation, including `VR/config.txt`.
+2. Extract the update ZIP and copy its contents into the game folder containing
+   `halo.exe`. Replace the included files and merge the `VR` folders.
+3. Keep the existing 32-bit `openvr_api.dll` and `VR/config.txt`; neither is
+   supplied by this update. An existing working HaloCEVR installation is required.
+4. Start SteamVR and Halo. Confirm **About** shows `0.1.0-alpha.1 / R1.37`.
+5. Choose **Comfort > Play posture**. Sitting remains the default; Standing
+   uses **Player height (cm)**. Select **Save** after changing settings.
+
+The complete procedure and rollback steps are in [INSTALL.txt](INSTALL.txt).
+
+## Build from source
 
 1. Extract the complete source ZIP into a new folder. Keep your working build
    and VR/config.txt as a rollback.
