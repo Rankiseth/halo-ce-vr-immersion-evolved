@@ -26,9 +26,10 @@ Planned title: **Halo CE VR - Immersion Evolved v0.1.0-alpha.1 (R1.37)**
 
 Planned tag: **v0.1.0-alpha.1**
 
-Windows/MSVC compilation and headset validation remain pending. Publishing
-this source commit does not create a binary release. Complete the checks in
-RELEASE_NOTES.md before creating the tag and publishing a pre-release.
+Rankiseth confirmed the core R1.37 headset checks on 2026-10-18. Archive and
+verify the tested binary and compiler output, and use the detailed regression
+checklist in RELEASE_NOTES.md before creating the tag and publishing a
+pre-release. Publishing source commits does not create a binary release.
 
 Build with Build-ImmersionEvolved.ps1. After a successful MSVC build, it stages
 an update folder and a Win32 update ZIP. The source ZIP is not an installable

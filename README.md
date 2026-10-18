@@ -10,7 +10,9 @@ physical weapon handling, manual reloads, body holsters, and VR comfort options.
 Maintained by [**Rankiseth**](https://github.com/Rankiseth/halo-ce-vr-immersion-evolved). The original mod and its contributors are credited
 in [CREDITS.md](CREDITS.md).
 
-**Windows compilation and headset testing of R1.37 are pending.** This source
+**Rankiseth confirmed R1.37 working in-headset on 2026-10-18**, including the
+Magnum empty-slide lock and Sitting/Standing holster settings. The tested binary
+and compiler output have not yet been archived for the release. This source
 package does not include a compiled d3d9.dll. See [release notes](RELEASE_NOTES.md).
 
 ## Requirements

@@ -1,6 +1,7 @@
 # Halo CE VR - Immersion Evolved v0.1.0-alpha.1 (R1.37)
 
-Release preparation. Windows/MSVC build and headset validation are pending.
+Release preparation. Core headset checks passed according to Rankiseth;
+the tested binary and build output are still needed for release packaging.
 
 An unofficial PCVR derivative of LivingFray's HaloCEVR, built on the existing
 Immersion Evolved / Stylish Restart work. Requires the original Halo PC retail
@@ -29,7 +30,18 @@ complete the existing full pull gesture, and release/return to chamber it.
 Short pulls and empty racks do not release the lock. Tactical reloads retain
 their previous behavior. Manual Reload must be enabled.
 
-## Headset checks before publishing a binary
+## Maintainer headset report - 2026-10-18
+
+Rankiseth confirmed that R1.37 works in-headset and that both the Magnum
+empty-slide lock and Sitting/Standing holster settings behave correctly.
+This is a maintainer-reported runtime result. The tested binary and compiler
+output have not yet been supplied for artifact verification.
+
+The report confirms those core behaviors; individual height extremes,
+left/right-handed variants, persistence, and partial-rack cases below were
+not separately reported.
+
+## Detailed release regression checklist
 
 1. Build with Visual Studio 2022 x86 and keep the compiler output.
 2. Confirm About shows v0.1.0-alpha.1 / R1.37 and the log marker is R1.37.

@@ -57,7 +57,8 @@
     "Fixed left/right vehicle sticks verified in all four controller profiles",
     "23924 production guide navigation and bundled-font layout checks passed (final Liberation Sans 2.1.5 check)",
     "89 production Comfort controls, text alignment, height bounds and config persistence checks passed",
-    "Windows/MSVC compilation and headset testing pending."
+    "Portable validation completed before the maintainer headset test; no Windows build was performed by Codex.",
+    "2026-10-18: Rankiseth reports R1.37 works in-headset, including the Magnum empty-slide lock and Sitting/Standing holster settings."
   ],
   "binary_profile": {
     "edition": "Halo PC retail (halor)",
@@ -100,13 +101,13 @@
       "RetailSeatCamera",
       "RetailGrenadeCommand"
     ],
-    "status": "Existing executable signatures retained; no new hook or executable address. R1.37 Windows build and runtime behavior unverified."
+    "status": "Existing executable signatures retained; no new hook or executable address. Rankiseth reports the core R1.37 headset checks passed; tested binary and compiler output not yet archived."
   },
   "limitations": [
-    "No precompiled DLL is included. Windows/MSVC compilation and headset checks are pending.",
+    "No precompiled DLL is included. The maintainer-tested binary and compiler output have not yet been supplied for release artifact verification.",
     "Custom Edition/SPV3 and multiplayer are not validated for this alpha."
   ],
-  "distribution": "Development source for an unofficial PCVR fork; Windows build and headset validation pending; no binary release included.",
+  "distribution": "Development source for an unofficial PCVR fork; core headset checks reported passed by the maintainer; no binary release included.",
   "changed_files": [
     "Build-ImmersionEvolved.ps1",
     "Build-Restart-R1.ps1",
@@ -214,5 +215,19 @@
     "fork_created_date": "2026-10-18",
     "source_import_parent": "18603218f96e9c31f887c069c1a112fe1edb943a",
     "prepared_source_commit": "20a347ddec2c355e5246ef634b041984ffc98b21"
+  },
+  "maintainer_headset_test": {
+    "date": "2026-10-18",
+    "tester": "Rankiseth",
+    "revision": "R1.37",
+    "source": "Maintainer confirmation in project conversation",
+    "confirmed": [
+      "R1.37 works in-headset",
+      "Magnum slide locks back when empty",
+      "Sitting/Standing holster settings behave correctly"
+    ],
+    "binary_artifact_received": false,
+    "compiler_output_received": false,
+    "scope": "Individual edge cases in the detailed release checklist were not separately reported."
   }
 }

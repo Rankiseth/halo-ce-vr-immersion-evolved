@@ -42,3 +42,10 @@ Final Liberation Sans 2.1.5 verification:
 89 production Comfort controls, text alignment, height bounds and config persistence checks passed
 
 No Windows/MSVC build or live headset test was performed.
+
+Maintainer headset report, 2026-10-18:
+Rankiseth confirms R1.37 works in-headset, with the Magnum empty-slide lock
+and Sitting/Standing holster settings behaving correctly. This report is
+separate from the portable automated checks above. Tested binary and compiler
+output have not yet been supplied; individual regression edge cases were not
+separately reported.
